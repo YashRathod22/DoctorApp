@@ -1,0 +1,8 @@
+export const white = '#fff'
+export const lightGreen = 'rgb(84,227,70)'
+export const inputGrey = 'rgb(146, 150, 147)'
+export const errorRed = '#dc2626'
+export const lightBlue = '#486cee'
+export const darkBlue = '#153e90'
+export const skyBlue = '#5b8cef'
+export const buttonGreen = '#18bd5b'
