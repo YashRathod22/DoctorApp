@@ -437,12 +437,13 @@ export const onChangeWeight = (userDetails: any, setFormValidation: any, formVal
     });
 };
 
-export const onBlurErrorEmail = (userDetails: any, setFormValidation: any, formValidation: any,) => {
+export const onBlurErrorEmail = (userDetails: any, setFormValidation: any, formValidation: any, emailExist: any) => {
 
     const newFormValidation = { ...formValidation };
     // const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const isValidEmail = emailRegex.test(userDetails.email);
+
 
 
     if (!userDetails.email) {
@@ -458,7 +459,7 @@ export const onBlurErrorEmail = (userDetails: any, setFormValidation: any, formV
         newFormValidation.errMsg = true;
 
     } else {
-        if (newFormValidation.emailError) {
+        if (newFormValidation.emailError && !emailExist) {
             newFormValidation.emailError = false;
             newFormValidation.emailErrTxt = '';
             newFormValidation.errCount = Math.max(newFormValidation.errCount - 1, 0);

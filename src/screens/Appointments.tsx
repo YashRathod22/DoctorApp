@@ -6,27 +6,29 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { deleteData } from '../store/action'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 
 const Appointments = () => {
     const appointmentData = useSelector((state: any) => state.reducer.userAppointData)
     console.log('update', appointmentData);
     const dispatch = useDispatch()
+    const insets = useSafeAreaInsets()
     const navigation = useNavigation()
     function deleteAppointData(data) {
         dispatch(deleteData(data))
     }
     return (
-        <ScrollView>
+        <ScrollView style={{ flexGrow: 1, marginBottom: insets.bottom }}>
 
             {
                 appointmentData.length > 0 ?
                     appointmentData.map((data: any, index: any) => (
                         <View style={styles.container}>
-                            <View style={{ flexDirection: 'row', gap: '10%', alignSelf: 'flex-start' }}>
+                            <View style={styles.card}>
 
                                 <Text style={styles.text}>Booked Appointments</Text>
-                                <View style={{ flexDirection: 'row', gap: '10%', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                <View style={styles.iconContainer}>
 
                                     <Pressable onPress={() => navigation.navigate('RequestAppointment', { userEmailData: data })} style={styles.icon}>
                                         <FontAwesome5 name='user-edit' size={20} color={darkBlue} />
@@ -73,6 +75,18 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        marginBottom: 10
+    },
+    card: {
+        flexDirection: 'row',
+        gap: '10%',
+        alignSelf: 'flex-start'
+    },
+    iconContainer: {
+        flexDirection: 'row',
+        gap: '10%',
+        alignItems: 'center',
+        justifyContent: 'flex-end'
     },
     icon: {
         // alignSelf: 'flex-end',

@@ -67,6 +67,8 @@ const RequestAppointment = ({ route }) => {
     const [year, setYear] = useState(yearFind)
     const [emailError, setEmailError] = useState(false)
     const [appointDateError, setAppointDateError] = useState(false)
+    const [emailExist, setEmailExist] = useState(false)
+
     const [appointSlotError, setAppointSlotError] = useState(false)
     const [userAppointmentDetails, setUserAppointmentDetails] = useState({
         firstName: route?.params?.userEmailData.firstName ? route?.params?.userEmailData.firstName : '',
@@ -270,11 +272,12 @@ const RequestAppointment = ({ route }) => {
 
         if (checkEmail(userAppointmentDetails.email)) {
             console.log('inside email', email);
-
+            setEmailExist(true)
             newFormValidation.emailError = true
             newFormValidation.errMsg = true
             newFormValidation.emailErrTxt = 'Email is already in use'
         } else {
+            setEmailExist(false)
             newFormValidation.emailError = false
             newFormValidation.errMsg = false
         }
@@ -300,13 +303,13 @@ const RequestAppointment = ({ route }) => {
             console.log('inside store data');
 
             dispatch(storeAppointData(userAppointmentDetails));
-            navigation.navigate('FormSubmission')
+            navigation.navigate('Appointments')
         }
         if (route?.params?.userEmailData) {
             console.log('inside update data');
 
             dispatch(updateAppointData(userAppointmentDetails));
-            navigation.navigate('FormSubmission')
+            navigation.navigate('Appointments')
         }
 
     };
@@ -422,7 +425,7 @@ const RequestAppointment = ({ route }) => {
                             errorText={appointmentFormValidation.phoneNoErrTxt} value={userAppointmentDetails.phoneNo} setUserDetails={setUserAppointmentDetails} userDetails={userAppointmentDetails} name='phoneNo' errorMsg={appointmentFormValidation.phoneNoErr}
                         />
                         <Text style={styles.textLabel}>Email <Text style={styles.star}>*</Text></Text>
-                        <CustomTextInput style={styles.input} onChange={() => onChangeEmail(userAppointmentDetails, setAppointFormValidation, appointmentFormValidation)} onBlur={() => onBlurErrorEmail(userAppointmentDetails, setAppointFormValidation, appointmentFormValidation)} placeholder='example@example.com'
+                        <CustomTextInput style={styles.input} onChange={() => onChangeEmail(userAppointmentDetails, setAppointFormValidation, appointmentFormValidation)} onBlur={() => onBlurErrorEmail(userAppointmentDetails, setAppointFormValidation, appointmentFormValidation, emailExist)} placeholder='example@example.com'
                             errorText={appointmentFormValidation.emailErrTxt} value={userAppointmentDetails.email} setUserDetails={setUserAppointmentDetails} userDetails={userAppointmentDetails} name='email' errorMsg={appointmentFormValidation.emailError} autoCapitalize={'none'}
                         />
                         <Text style={styles.bottomLabel}>example@example.com</Text>

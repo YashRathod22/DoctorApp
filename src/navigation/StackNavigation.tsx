@@ -8,10 +8,13 @@ import MedicalConsentForm from '../screens/MedicalConsentForm';
 import RequestAppointment from '../screens/RequestAppointment';
 import Appointments from '../screens/Appointments';
 import FormSubmission from '../screens/FormSubmission';
-
+import { useNavigation } from '@react-navigation/native';
+import { Pressable } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo'
 
 const StackNavigation = () => {
     const Stack = createStackNavigator()
+    const navigation = useNavigation()
     return (
         <Stack.Navigator>
             <Stack.Screen options={{
@@ -26,7 +29,11 @@ const StackNavigation = () => {
             <Stack.Screen options={{
                 title: 'Request an Appointment'
             }} name='RequestAppointment' component={RequestAppointment} />
-            <Stack.Screen name='Appointments' component={Appointments} />
+            <Stack.Screen options={{
+                headerLeft: (props) => (<Pressable style={{ marginLeft: 5 }} onPress={() => navigation.navigate('Home')}>
+                    <Entypo name='chevron-left' size={25} color={'#000'} />
+                </Pressable>)
+            }} name='Appointments' component={Appointments} />
             <Stack.Screen name='FormSubmission' component={FormSubmission} />
         </Stack.Navigator>
     )

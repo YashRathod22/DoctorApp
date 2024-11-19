@@ -7,7 +7,7 @@ import { actuatedNormalize, isTab } from '../utils/Scaling'
 import { Image } from 'react-native'
 import { facebookURL, linkedinURL, image1, image2, twitterURL, youtubeURL, image3, image4 } from '../utils/Uri'
 import { darkBlue, lightGreen, skyBlue, white } from '../utils/Color'
-import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import Carousel from 'react-native-reanimated-carousel';
 import {
     configureReanimatedLogger,
     ReanimatedLogLevel,
