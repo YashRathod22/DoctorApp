@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, TextInput, Pressable, Modal, TouchableOpacity, TouchableHighlight } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, TextInput, Pressable, TouchableOpacity } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { actuatedNormalize, isTab } from '../utils/Scaling'
 import CustomTextInput from '../components/CustomTextInput';
@@ -100,6 +100,16 @@ const RequestAppointment = ({ route }) => {
         phoneNoErrTxt: '',
         genderErrTxt: ''
     })
+
+    const [isDisabled, setIsDisabled] = useState(false)
+
+    useEffect(() => {
+        if (appointmentFormValidation.errCount > 0) {
+            setIsDisabled(true)
+        } else {
+            setIsDisabled(false)
+        }
+    }, [appointmentFormValidation.errCount])
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -541,7 +551,7 @@ const RequestAppointment = ({ route }) => {
                 <TouchableOpacity style={styles.button3}>
                     <Text style={styles.btntext}>Save</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleSubmit()} style={styles.button2}>
+                <TouchableOpacity disabled={isDisabled} onPress={() => handleSubmit()} style={[styles.button2, isDisabled ? { backgroundColor: '#78bf95' } : { backgroundColor: buttonGreen }]}>
                     <Text style={styles.btntext1}>Submit</Text>
                 </TouchableOpacity>
             </View>

@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { SelectList } from 'react-native-dropdown-select-list'
 import CustomTextInput from '../components/CustomTextInput'
 import { actuatedNormalize, isTab } from '../utils/Scaling'
 import { gender } from '../utils/InputData'
@@ -68,6 +67,15 @@ const MedicalHistoryForm = () => {
         reasonErrTxt: '',
         genderErrTxt: ''
     })
+    const [isDisabled, setIsDisabled] = useState(false)
+    // console.log(isDisabled);
+    useEffect(() => {
+        if (formValidation.errCount > 0) {
+            setIsDisabled(true)
+        } else {
+            setIsDisabled(false)
+        }
+    }, [formValidation.errCount])
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -376,7 +384,7 @@ const MedicalHistoryForm = () => {
                 <TouchableOpacity style={styles.button}>
                     <Text style={styles.btntext}>Save</Text>
                 </TouchableOpacity>
-                <TouchableOpacity disabled={formValidation.errCount > 0 ? true : false} onPress={handleSubmit} style={styles.button2}>
+                <TouchableOpacity disabled={isDisabled} onPress={handleSubmit} style={[styles.button2, isDisabled ? { backgroundColor: '#78bf95' } : { backgroundColor: buttonGreen }]}>
                     <Text style={styles.btntext1}>Submit</Text>
                 </TouchableOpacity>
             </View>

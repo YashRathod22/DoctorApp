@@ -2,13 +2,12 @@ import { View, Text, Pressable, StyleSheet, TouchableOpacity, Linking } from 're
 import React from 'react'
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { actuatedNormalize, isTab } from '../utils/Scaling'
-import { facebookURL, linkedinURL, twitterURL, youtubeURL } from '../utils/Uri'
+import { facebookURL, linkedinURL, mapsURL, twitterURL, youtubeURL } from '../utils/Uri'
 import { darkBlue, lightBlue, lightGreen, skyBlue, white } from '../utils/Color'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Platform } from 'react-native'
-
-
 
 const ReachUs = () => {
     const places = [
@@ -26,11 +25,14 @@ const ReachUs = () => {
         else { phoneNumber = `tel:${number}`; }
         Linking.openURL(phoneNumber);
     };
+    const origin = { latitude: 18.932245, longitude: 72.826439 }
+    const destination = { latitude: 19.01445577493574, longitude: 72.86086460575461 }
     return (
         <View style={styles.subContainer}>
             <View style={styles.card}>
                 <Text style={styles.textLabel}>Reach Us</Text>
                 <View style={styles.CardStyle}>
+
                     <MapView
                         style={styles.map}
                         initialRegion={{
@@ -48,8 +50,13 @@ const ReachUs = () => {
                                     coordinate={place.coordinate}
                                 />
                             })
+
                         }
+
                     </MapView>
+                    <Pressable onPress={() => Linking.openURL(mapsURL)} style={styles.locationIcon}>
+                        <Ionicons name='location-outline' size={26} color={'white'} />
+                    </Pressable>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => dialCall(9823238583)} style={styles.button}>
@@ -120,9 +127,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        position: 'relative'
     },
     map: {
         ...StyleSheet.absoluteFillObject
+    },
+    locationIcon: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        zIndex: 999,
+        backgroundColor: 'blue',
+        borderRadius: 10,
+        padding: 5
     },
     socialIcon: {
         backgroundColor: darkBlue,

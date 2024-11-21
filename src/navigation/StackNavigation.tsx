@@ -11,15 +11,20 @@ import FormSubmission from '../screens/FormSubmission';
 import { useNavigation } from '@react-navigation/native';
 import { Pressable } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo'
+import SplashScreen from '../screens/SplashScreen';
+import Home from '../screens/Home';
 
 const StackNavigation = () => {
     const Stack = createStackNavigator()
     const navigation = useNavigation()
     return (
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName='SplashScreen'>
             <Stack.Screen options={{
                 headerShown: false
             }} name='DrawerNavigation' component={DrawerNavigation} />
+            <Stack.Screen options={{
+                headerShown: false
+            }} name='SplashScreen' component={SplashScreen} />
             <Stack.Screen options={{
                 title: 'Your Medical History'
             }} name='MedicalHistoryForm' component={MedicalHistoryForm} />
