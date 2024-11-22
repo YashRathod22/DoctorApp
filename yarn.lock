@@ -3101,7 +3101,6 @@ __metadata:
     react: 18.3.1
     react-native: 0.76.0
     react-native-calendars: ^1.1307.0
-    react-native-dropdown-select-list: ^2.0.5
     react-native-element-dropdown: ^2.12.2
     react-native-gesture-handler: ^2.20.2
     react-native-keyboard-aware-scroll-view: ^0.9.5
@@ -8274,13 +8273,6 @@ __metadata:
     moment:
       optional: true
   checksum: 1fc559d66bf0c687c09ba9462f243051127154efb4e0e293ddbabdfe8a64523ca114c905d853a2b911626b32c2f25abdb1de39cd07e8865d8c6a970991175195
-  languageName: node
-  linkType: hard
-
-"react-native-dropdown-select-list@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "react-native-dropdown-select-list@npm:2.0.5"
-  checksum: bbf3f05cceae402aab122a83026521da3125e25a1bead5cb2a739316788a8980fc86229c6144cbce9ea6ab58e91a3d7291e41de9a9715ca9e980c05af81486c3
   languageName: node
   linkType: hard
 
