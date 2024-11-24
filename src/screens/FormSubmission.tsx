@@ -3,7 +3,15 @@ import React from 'react';
 import {lightGreen, white} from '../utils/Color';
 import Octicons from 'react-native-vector-icons/Octicons';
 import LottieView from 'lottie-react-native';
+import {useGoBackHandler} from '../customHooks/GoBackhandler';
+import {useNavigation} from '@react-navigation/native';
 const FormSubmission = () => {
+  const navigation = useNavigation<any>();
+
+  useGoBackHandler(() => {
+    navigation.navigate('Home');
+    return true;
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
@@ -11,8 +19,8 @@ const FormSubmission = () => {
         <LottieView
           style={{flex: 1}}
           source={require('../../assets/check.json')}
-          autoPlay
-          loop
+          autoPlay={true}
+          loop={false}
         />
       </View>
       <Text style={styles.text}>Thank You!</Text>
@@ -40,19 +48,19 @@ const styles = StyleSheet.create({
   },
   icon: {
     alignSelf: 'center',
-    marginTop: '20%',
-    width: 110,
-    height: 110,
+    marginTop: '10%',
+    width: 220,
+    height: 160,
   },
   text: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 10,
     fontSize: 21,
     fontWeight: 'bold',
   },
   text2: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 15,
     fontSize: 17,
   },
 });
