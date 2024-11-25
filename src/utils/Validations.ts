@@ -211,7 +211,6 @@ export const onChangeAge = (
       newFormValidation.errMsg = true;
     }
   } else if (userDetails.age > 100) {
-    console.log(userDetails.age);
     if (!newFormValidation.ageError) {
       newFormValidation.ageError = true;
       newFormValidation.ageErrTxt = 'Age is invalid';
@@ -268,7 +267,6 @@ export const onBlurErrorPhoneNo = (
   const isValid = phoneNoLength > 8 && phoneNoLength < 11;
   const phoneRegex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$/;
   const isValidPhoneNo = phoneRegex.test(userDetails.phoneNo);
-  // console.log('inside onblur', isValidPhoneNo, phoneNoLength);
 
   if (userDetails.phoneNo === '') {
     if (!newFormValidation.phoneNoErr) {
@@ -303,7 +301,6 @@ export const onChangePhoneNo = (
   const isValid = phoneNoLength > 8 && phoneNoLength < 11;
   const phoneRegex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{8}$/;
   const isValidPhoneNo = phoneRegex.test(userDetails.phoneNo);
-  // console.log('inside onchange', isValidPhoneNo, phoneNoLength);
 
   if (!isValidPhoneNo) {
     if (!newFormValidation.phoneNoErr) {
@@ -337,7 +334,6 @@ export const onBlurErrorHeight = (
   const newFormValidation = {...formValidation};
   const heightLength = userDetails.height.length;
   const isValid = heightLength > 2 && heightLength < 4;
-  console.log(heightLength);
 
   if (!userDetails.height) {
     if (!newFormValidation.heightError) {
@@ -440,7 +436,6 @@ export const onChangeWeight = (
 
   const weightLength = userDetails.weight.length;
   const isValid = weightLength > 0 && weightLength < 3;
-  console.log(weightLength);
 
   if (!isValid) {
     if (!newFormValidation.weightError) {

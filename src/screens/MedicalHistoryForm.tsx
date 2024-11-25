@@ -88,7 +88,6 @@ const MedicalHistoryForm = () => {
     genderErrTxt: '',
   });
   const [isDisabled, setIsDisabled] = useState(false);
-  // console.log(isDisabled);
   useEffect(() => {
     if (formValidation.errCount > 0) {
       setIsDisabled(true);
@@ -108,10 +107,8 @@ const MedicalHistoryForm = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state: any) => state.reducer.userDetails);
   const email = userData.map((data: any) => data.email);
-  // console.log(email);
   const checkEmail = (userEmail: string) => {
     const newAray = email?.filter((e: string) => e === userEmail);
-    // console.log('aaaaddd', newAray)
     if (newAray[0] === userEmail) {
       return true;
     } else {
@@ -174,19 +171,16 @@ const MedicalHistoryForm = () => {
     }
 
     if (!userDetails.email) {
-      console.log('inside empty email');
       setEmailError(true);
       newFormValidation.emailError = true;
       // newFormValidation.errCount += 1;
       newFormValidation.emailErrTxt = 'Email is required';
     } else {
-      console.log('inside email else');
       setEmailError(false);
       newFormValidation.emailError = false;
     }
 
     if (checkEmail(userDetails.email)) {
-      console.log('inside email', email);
       setEmailExist(true);
       newFormValidation.emailError = true;
       newFormValidation.errMsg = true;
@@ -229,7 +223,6 @@ const MedicalHistoryForm = () => {
       navigation.navigate('FormSubmission');
     }
   };
-  console.log(userDetails);
 
   const styles = getStyles(formValidation.genderError);
 
@@ -293,8 +286,6 @@ const MedicalHistoryForm = () => {
                   setUserDetails({...userDetails, gender: selectedItem.value})
                 }
                 renderButton={(selectedItem, isOpened) => {
-                  console.log(selectedItem);
-
                   return (
                     <View style={styles.dropdownButtonStyle}>
                       {selectedItem && (

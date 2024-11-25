@@ -82,7 +82,6 @@ const RequestAppointment = ({route}: any) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const todayDate = new Date();
   const dateString = todayDate.toLocaleDateString();
-  // console.log(date2)
   const dayFind = todayDate.getDay();
   const monthFind = todayDate.getMonth();
   const dateFind = todayDate.getDate();
@@ -241,12 +240,10 @@ const RequestAppointment = ({route}: any) => {
     (state: any) => state.reducer.userAppointData,
   );
   const email = appointData.map((data: any) => data.email);
-  //   console.log('llll', email);
   function checkEmail(userEmail: string) {
     if (route?.params?.userEmailData) return false;
 
     const newAray = email?.filter((e: string) => e === userEmail);
-    // console.log('aaaaddd', newAray);
     if (newAray[0] === userEmail) {
       return true;
     } else {
@@ -269,7 +266,6 @@ const RequestAppointment = ({route}: any) => {
       });
     }
   }, [emailError, userAppointmentDetails.email]);
-  //   console.log(userAppointmentDetails.email);
 
   const navigation = useNavigation<any>();
 
@@ -310,13 +306,11 @@ const RequestAppointment = ({route}: any) => {
     }
 
     if (!userAppointmentDetails.email) {
-      console.log('inside empty email');
       setEmailError(true);
       newFormValidation.emailError = true;
       newFormValidation.errCount += 1;
       newFormValidation.emailErrTxt = 'Email is required';
     } else {
-      console.log('inside email else');
       setEmailError(false);
       newFormValidation.emailError = false;
     }
@@ -333,7 +327,6 @@ const RequestAppointment = ({route}: any) => {
     // }
 
     if (checkEmail(userAppointmentDetails.email)) {
-      console.log('inside email', email);
       setEmailExist(true);
       newFormValidation.emailError = true;
       newFormValidation.errMsg = true;
@@ -366,19 +359,14 @@ const RequestAppointment = ({route}: any) => {
       !newFormValidation.emailError &&
       !route?.params?.userEmailData
     ) {
-      console.log('inside store data');
-
       dispatch(storeAppointData(userAppointmentDetails));
       navigation.navigate('FormSubmission', {fromAppointment: true});
     }
     if (route?.params?.userEmailData) {
-      console.log('inside update data');
-
       dispatch(updateAppointData(userAppointmentDetails));
       navigation.navigate('Appointments');
     }
   };
-  console.log(appointData);
 
   const styles = getStyles(appointmentFormValidation.genderError);
 
@@ -508,8 +496,6 @@ const RequestAppointment = ({route}: any) => {
                     : undefined
                 }
                 renderButton={(selectedItem, isOpened) => {
-                  console.log(selectedItem);
-
                   return (
                     <View style={styles.dropdownButtonStyle}>
                       {selectedItem && (

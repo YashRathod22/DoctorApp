@@ -9,15 +9,6 @@ const FormSubmission = ({route}: any) => {
   const navigation = useNavigation<any>();
   const animationRef = useRef<LottieView>(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      animationRef.current?.play();
-    }, 1000);
-
-    // // Or set a specific startFrame and endFrame with:
-    // animationRef.current?.play(30, 120);
-  }, []);
-
   useGoBackHandler(() => {
     navigation.navigate('Home');
     return true;
@@ -75,13 +66,13 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    marginTop: 5,
+    marginTop: 3,
     fontSize: 21,
     fontWeight: 'bold',
   },
   text2: {
     textAlign: 'center',
-    marginTop: 13,
+    marginTop: 15,
     fontSize: 17,
   },
   btntext1: {

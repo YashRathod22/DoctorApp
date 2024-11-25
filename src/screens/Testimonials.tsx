@@ -64,7 +64,6 @@ const Testimonials = () => {
   const [toggleAutoPlay, setToggleAutoPlay] = useState(true);
   const width = Dimensions.get('window').width;
   const carouselRef = useRef<any>();
-  // console.log('carouselRef', carouselRef);
 
   const scrollRight = () => {
     if (carouselRef?.current) {

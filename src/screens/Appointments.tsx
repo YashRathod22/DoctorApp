@@ -13,7 +13,6 @@ const Appointments = () => {
   const appointmentData = useSelector(
     (state: any) => state.reducer.userAppointData,
   );
-  console.log('update', appointmentData);
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();

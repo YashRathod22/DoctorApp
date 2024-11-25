@@ -55,7 +55,6 @@ const MedicalConsentForm = () => {
 
   const navigation = useNavigation<any>();
   const handleSubmit = () => {
-    console.log(userDetails);
     navigation.navigate('FormSubmission');
   };
 
@@ -129,8 +128,6 @@ const MedicalConsentForm = () => {
                 setUserDetails({...userDetails, gender: selectedItem.value})
               }
               renderButton={(selectedItem, isOpened) => {
-                // console.log(selectedItem);
-
                 return (
                   <View style={styles.dropdownButtonStyle}>
                     {selectedItem && (
