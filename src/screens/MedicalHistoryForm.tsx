@@ -287,12 +287,6 @@ const MedicalHistoryForm = () => {
               Patient Gender <Text style={styles.star}>*</Text>
             </Text>
             <View style={styles.genderContainer}>
-              {/* <SelectList
-                                search={false}
-                                setSelected={(val: any) => setUserDetails({ ...userDetails, gender: val })}
-                                data={gender}
-                                save='value'
-                            /> */}
               <SelectDropdown
                 data={gender}
                 onSelect={(selectedItem, index) =>

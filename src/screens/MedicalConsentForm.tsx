@@ -5,9 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  TextInput,
-  Pressable,
-  Modal,
 } from 'react-native';
 import React, {useState} from 'react';
 import {actuatedNormalize, isTab} from '../utils/Scaling';
@@ -21,7 +18,6 @@ import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MedicalConsentForm = () => {
-  const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<any>('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
@@ -127,12 +123,6 @@ const MedicalConsentForm = () => {
           </View>
           <Text style={styles.textLabel}>Gender</Text>
           <View style={styles.genderContainer}>
-            {/* <SelectList
-                            search={false}
-                            setSelected={(val: any) => setUserDetails({ ...userDetails, gender: val })}
-                            data={gender}
-                            save='value'
-                        /> */}
             <SelectDropdown
               data={gender}
               onSelect={(selectedItem, index) =>
@@ -179,7 +169,6 @@ const MedicalConsentForm = () => {
               }}
               showsVerticalScrollIndicator={false}
               dropdownStyle={styles.dropdownMenuStyle}
-              // onBlur={() => onBlurErrorGender(userDetails, setFormValidation, formValidation)}
             />
           </View>
           <Text style={styles.textLabel}>Email</Text>

@@ -30,7 +30,7 @@ const Appointments = () => {
     <ScrollView style={{flexGrow: 1, marginBottom: insets.bottom}}>
       {appointmentData.length > 0 ? (
         appointmentData.map((data: any, index: any) => (
-          <View style={styles.container}>
+          <View key={data.email} style={styles.container}>
             <View style={styles.card}>
               <Text style={styles.text}>Booked Appointments</Text>
               <View style={styles.iconContainer}>

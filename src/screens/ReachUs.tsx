@@ -60,7 +60,6 @@ const ReachUs = () => {
               longitudeDelta: 0.40797118991613388,
             }}
             provider={PROVIDER_GOOGLE}
-            // onRegionChange={(region) => console.log(region)}
             zoomControlEnabled={true}
             zoomEnabled
             zoomTapEnabled>

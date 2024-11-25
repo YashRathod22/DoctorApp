@@ -369,7 +369,7 @@ const RequestAppointment = ({route}: any) => {
       console.log('inside store data');
 
       dispatch(storeAppointData(userAppointmentDetails));
-      navigation.navigate('Appointments');
+      navigation.navigate('FormSubmission', {fromAppointment: true});
     }
     if (route?.params?.userEmailData) {
       console.log('inside update data');
