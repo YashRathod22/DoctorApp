@@ -43,7 +43,7 @@ export const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         userAppointData: state.userAppointData.filter(
-          appointment => appointment.email !== action.data.email,
+          appointment => appointment.email !== action.data,
         ),
       };
 

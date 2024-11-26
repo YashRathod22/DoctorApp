@@ -16,8 +16,9 @@ const Appointments = () => {
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
-  function deleteAppointData({data}: any) {
-    dispatch(deleteData(data));
+
+  function deleteAppointData(data) {
+    dispatch(deleteData(data.email));
   }
 
   useGoBackHandler(() => {
