@@ -20,7 +20,7 @@ export const reducer = (state = initialState, action: any) => {
       };
     case USER_APPOINT_DATA:
       const isNewAppointment = !state.userAppointData.some(
-        appointment => appointment.email === action.data.email,
+        appointment => appointment.id === action.data.id,
       );
 
       return {
@@ -34,7 +34,7 @@ export const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         userAppointData: state.userAppointData.map(appointment =>
-          appointment.email === action.data.email
+          appointment.id === action.data.id
             ? {...appointment, ...action.data}
             : appointment,
         ),
@@ -43,7 +43,7 @@ export const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         userAppointData: state.userAppointData.filter(
-          appointment => appointment.email !== action.data,
+          appointment => appointment.id !== action.data,
         ),
       };
 

@@ -46,6 +46,7 @@ import ErrorPopUp from '../components/ErrorPopUp';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SelectDropdown from 'react-native-select-dropdown';
+import {nanoid} from '@reduxjs/toolkit';
 
 const timeDetails = [
   {
@@ -97,6 +98,7 @@ const RequestAppointment = ({route}: any) => {
 
   const [appointSlotError, setAppointSlotError] = useState(false);
   const [userAppointmentDetails, setUserAppointmentDetails] = useState({
+    id: nanoid(),
     firstName: route?.params?.userEmailData.firstName
       ? route?.params?.userEmailData.firstName
       : '',
@@ -314,17 +316,6 @@ const RequestAppointment = ({route}: any) => {
       setEmailError(false);
       newFormValidation.emailError = false;
     }
-
-    // if (userAppointmentDetails.email === '') {
-    //     setAppointFormValidation((prevFormValidation) => {
-    //         const newFormValidation = { ...prevFormValidation };
-    //         newFormValidation.emailError = true;
-    //         newFormValidation.emailErrTxt = 'Email is required!';
-    //         newFormValidation.errCount = Math.max(newFormValidation.errCount - 1, 0);
-    //         newFormValidation.errMsg = true;
-    //         return newFormValidation;
-    //     });
-    // }
 
     if (checkEmail(userAppointmentDetails.email)) {
       setEmailExist(true);

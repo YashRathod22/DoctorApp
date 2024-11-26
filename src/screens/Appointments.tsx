@@ -18,7 +18,7 @@ const Appointments = () => {
   const navigation = useNavigation<any>();
 
   function deleteAppointData(data) {
-    dispatch(deleteData(data.email));
+    dispatch(deleteData(data.id));
   }
 
   useGoBackHandler(() => {
