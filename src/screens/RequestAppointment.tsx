@@ -73,20 +73,23 @@ const timeDetails = [
 
 const RequestAppointment = ({route}: any) => {
   const [selectedId, setSelectedId] = useState<string | undefined>();
-  const [selectedDate, setSelectedDate] = useState<String>(
-    route?.params?.userEmailData.appointmentDate
-      ? route?.params?.userEmailData.appointmentDate
-      : '',
-  );
   const [timeData, setTimeData] = useState(timeDetails);
   const [comment, setComment] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const todayDate = new Date();
-  const dateString = todayDate.toLocaleDateString();
+
   const dayFind = todayDate.getDay();
   const monthFind = todayDate.getMonth();
   const dateFind = todayDate.getDate();
   const yearFind = todayDate.getFullYear();
+  const day1 = String(todayDate.getDate()).padStart(2, '0');
+  const month1 = String(todayDate.getMonth() + 1).padStart(2, '0');
+  const dateString = `${day1}/${month1}/${yearFind}`;
+  const [selectedDate, setSelectedDate] = useState(
+    route?.params?.userEmailData.appointmentDate
+      ? route?.params?.userEmailData.appointmentDate
+      : '',
+  );
   const [defaultDate, setDefaultDate] = useState(dateString);
   const [day, setDay] = useState(weekday[dayFind]);
   const [date, setDate] = useState(dateFind);
@@ -98,7 +101,7 @@ const RequestAppointment = ({route}: any) => {
 
   const [appointSlotError, setAppointSlotError] = useState(false);
   const [userAppointmentDetails, setUserAppointmentDetails] = useState({
-    id: nanoid(),
+    id: route?.params?.uniqueId ? route?.params?.uniqueId : nanoid(),
     firstName: route?.params?.userEmailData.firstName
       ? route?.params?.userEmailData.firstName
       : '',
@@ -146,7 +149,11 @@ const RequestAppointment = ({route}: any) => {
   });
 
   const [isDisabled, setIsDisabled] = useState(false);
-
+  const [updatedDate, setUpdatedDate] = useState(
+    route?.params?.userEmailData.appointmentDate
+      ? route?.params?.userEmailData.appointmentDate
+      : new Date(),
+  );
   useEffect(() => {
     if (appointmentFormValidation.errCount > 0) {
       setIsDisabled(true);
@@ -163,15 +170,18 @@ const RequestAppointment = ({route}: any) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date: any) => {
+  const handleConfirm = date => {
     const dt = new Date(date);
-    const dt1 = dt.toLocaleDateString();
+    // const dt1 = dt.toLocaleDateString();
+    const day1 = String(dt.getDate()).padStart(2, '0');
+    const month = String(dt.getMonth() + 1).padStart(2, '0');
+    const year = dt.getFullYear();
+    const dt1 = `${day1}/${month}/${year}`;
 
     const dayFind = dt.getDay();
     const day = weekday[dayFind];
     const date1 = dt.getDate();
     const month1 = dt.getMonth();
-    const year = dt.getFullYear();
     hideDatePicker();
 
     setSelectedDate(dt1);
@@ -358,6 +368,8 @@ const RequestAppointment = ({route}: any) => {
       navigation.navigate('Appointments');
     }
   };
+  //   console.log(userAppointmentDetails);
+  console.log(route?.params?.userEmailData.appointmentDate);
 
   const styles = getStyles(appointmentFormValidation.genderError);
 
@@ -386,6 +398,7 @@ const RequestAppointment = ({route}: any) => {
       });
     }
   }, [userAppointmentDetails.gender]);
+  const [contentBottom, setContentBottom] = useState(0);
 
   return (
     <>
@@ -394,7 +407,16 @@ const RequestAppointment = ({route}: any) => {
         errMsg={appointmentFormValidation.errMsg}
       />
       <ScrollView bounces={false}>
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          enableOnAndroid={true}
+          keyboardOpeningTime={0}
+          //   extraScrollHeight={0}
+          //   enableResetScrollToCoords
+          //   onKeyboardWillHide={() => setContentBottom(0)}
+          //   onKeyboardWillShow={() => setContentBottom(200)}
+          //   contentInset={{bottom: contentBottom}}
+        >
           <View style={styles.container}>
             <Text style={styles.heading}>Request an Appointment</Text>
             <View style={styles.line}></View>
@@ -461,16 +483,6 @@ const RequestAppointment = ({route}: any) => {
               Patient Gender <Text style={styles.star}>*</Text>
             </Text>
             <View style={styles.genderContainer}>
-              {/* <SelectList
-                                search={false}
-                                defaultOption={route?.params?.userEmailData.gender ?
-                                    route?.params?.userEmailData.gender === 'Male' ?
-                                        { key: 1, value: 'Male' } : { key: 2, value: 'Female' }
-                                    : undefined}
-                                setSelected={(val: any) => setUserAppointmentDetails({ ...userAppointmentDetails, gender: val })}
-                                data={gender}
-                                save='value'
-                            /> */}
               <SelectDropdown
                 data={gender}
                 onSelect={(selectedItem, index) =>
@@ -669,7 +681,12 @@ const RequestAppointment = ({route}: any) => {
                     mode="date"
                     onConfirm={handleConfirm}
                     onCancel={hideDatePicker}
-                    minimumDate={todayDate}
+                    minimumDate={updatedDate}
+                    date={
+                      route?.params?.userEmailData.appointmentDate
+                        ? route?.params?.userEmailData.appointmentDate
+                        : todayDate
+                    }
                   />
                 </TouchableOpacity>
               </View>
@@ -780,9 +797,9 @@ const RequestAppointment = ({route}: any) => {
         </KeyboardAwareScrollView>
       </ScrollView>
       <View style={styles.savebtn}>
-        <TouchableOpacity style={styles.button3}>
+        {/* <TouchableOpacity style={styles.button3}>
           <Text style={styles.btntext}>Save</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           disabled={isDisabled}
           onPress={() => handleSubmit()}
@@ -930,12 +947,14 @@ const getStyles = (genderErr: any) =>
     btntext1: {
       fontSize: 16,
       color: white,
+      textAlign: 'center',
     },
     button2: {
       padding: 10,
       borderRadius: 5,
       backgroundColor: buttonGreen,
       borderColor: buttonGreen,
+      width: '30%',
     },
     cancelBtn: {
       backgroundColor: '#dadef3',

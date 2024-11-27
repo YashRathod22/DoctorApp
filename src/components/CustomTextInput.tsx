@@ -19,6 +19,7 @@ const CustomTextInput = ({
   onChange,
   autoCapitalize,
   inputMode,
+  editable,
 }: any) => {
   return (
     <>
@@ -38,6 +39,7 @@ const CustomTextInput = ({
         onChange={onChange}
         autoCapitalize={autoCapitalize}
         inputMode={inputMode}
+        editable={editable}
       />
 
       {errorMsg ? (

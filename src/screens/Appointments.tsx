@@ -25,12 +25,13 @@ const Appointments = () => {
     navigation.navigate('Home');
     return true;
   }, []);
+  //   console.log(appointmentData);
 
   return (
     <ScrollView style={{flexGrow: 1, marginBottom: insets.bottom}}>
       {appointmentData.length > 0 ? (
-        appointmentData.map((data: any, index: any) => (
-          <View key={data.email} style={styles.container}>
+        appointmentData.map((data: any) => (
+          <View key={data.id} style={styles.container}>
             <View style={styles.card}>
               <Text style={styles.text}>Booked Appointments</Text>
               <View style={styles.iconContainer}>
@@ -38,6 +39,7 @@ const Appointments = () => {
                   onPress={() =>
                     navigation.navigate('RequestAppointment', {
                       userEmailData: data,
+                      uniqueId: data.id,
                     })
                   }
                   style={styles.icon}>

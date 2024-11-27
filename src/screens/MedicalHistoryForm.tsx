@@ -5,6 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CustomTextInput from '../components/CustomTextInput';
@@ -118,11 +121,54 @@ const MedicalHistoryForm = () => {
 
   const handleConfirm = (date: any) => {
     const dt = new Date(date);
-    const dt1 = dt.toLocaleDateString();
-    hideDatePicker();
+    // const dt1 = dt.toLocaleDateString();
+    const day1 = String(dt.getDate()).padStart(2, '0');
+    const month = String(dt.getMonth() + 1).padStart(2, '0');
+    const year = dt.getFullYear();
+    const dt1 = `${day1}/${month}/${year}`;
+    console.log('sdcsdcsdc', dt1);
+
+    setUserDetails(prevDetails => ({
+      ...prevDetails,
+      dob: dt1,
+    }));
     setSelectedDate(dt1);
-    setUserDetails({...userDetails, dob: dt1});
+    // calculateAge(dt1);
+    hideDatePicker();
   };
+
+  // useEffect(() => {
+  //   if (userDetails.dob !== '') {
+  //     calculateAge(userDetails.dob);
+  //   }
+  // }, [userDetails.dob]);
+  console.log('sdcuser======', userDetails);
+
+  function calculateAge(birthDateStr) {
+    const [day, month, year] = birthDateStr.split('/').map(Number);
+
+    const birthDate = new Date(year, month - 1, day);
+    console.log(birthDate);
+
+    if (isNaN(birthDate)) {
+      return 'Invalid date format';
+    }
+
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+    console.log(age);
+    setUserDetails({...userDetails, age: age});
+    return age;
+  }
+  console.log(userDetails);
 
   const navigation = useNavigation<any>();
 
@@ -146,13 +192,13 @@ const MedicalHistoryForm = () => {
       newFormValidation.lastNameErr = false;
     }
 
-    if (!userDetails.age) {
-      newFormValidation.errCount += 1;
-      newFormValidation.ageError = true;
-      newFormValidation.ageErrTxt = 'Age is required';
-    } else {
-      newFormValidation.ageError = false;
-    }
+    // if (!userDetails.age) {
+    //   newFormValidation.errCount += 1;
+    //   newFormValidation.ageError = true;
+    //   newFormValidation.ageErrTxt = 'Age is required';
+    // } else {
+    //   newFormValidation.ageError = false;
+    // }
 
     if (!userDetails.height) {
       newFormValidation.errCount += 1;
@@ -262,6 +308,7 @@ const MedicalHistoryForm = () => {
     if (userDetails.dob !== '') {
       setDobError(false);
       formValidation.errCount = Math.max(formValidation.errCount - 1, 0);
+      calculateAge(userDetails.dob);
     }
   }, [userDetails.dob]);
 
@@ -271,8 +318,9 @@ const MedicalHistoryForm = () => {
         errCount={formValidation.errCount}
         errMsg={formValidation.errMsg}
       />
-      <ScrollView bounces={false}>
-        <KeyboardAwareScrollView>
+      {/* <SafeAreaView style={{flex: 1}}> */}
+      <ScrollView bounces={false} keyboardShouldPersistTaps="handled">
+        <KeyboardAwareScrollView enableOnAndroid={true}>
           <View style={styles.container}>
             <Text style={styles.heading}>General Patient Information</Text>
             <View style={styles.line}></View>
@@ -454,7 +502,14 @@ const MedicalHistoryForm = () => {
             <Text style={styles.textLabel}>
               Age <Text style={styles.star}>*</Text>
             </Text>
-            <CustomTextInput
+            <View style={styles.input}>
+              <Text>
+                {userDetails.age > 0
+                  ? userDetails.age
+                  : 'Select date from above'}
+              </Text>
+            </View>
+            {/* <CustomTextInput
               style={[styles.input]}
               onChange={() =>
                 onChangeAge(userDetails, setFormValidation, formValidation)
@@ -462,15 +517,16 @@ const MedicalHistoryForm = () => {
               onBlur={() =>
                 onBlurErrorAge(userDetails, setFormValidation, formValidation)
               }
-              placeholder="ex: 23"
+              placeholder={userDetails.age}
               errorText={formValidation.ageErrTxt}
               type={'number-pad'}
-              value={userDetails.age}
+              // value={userDetails.age}
               setUserDetails={setUserDetails}
               userDetails={userDetails}
               name="age"
               errorMsg={formValidation.ageError}
-            />
+              editable={false}
+            /> */}
             <Text style={styles.textLabel}>
               Patient Height (cm's) <Text style={styles.star}>*</Text>
             </Text>
@@ -574,10 +630,12 @@ const MedicalHistoryForm = () => {
           </View>
         </KeyboardAwareScrollView>
       </ScrollView>
+      {/* </SafeAreaView> */}
+
       <View style={styles.savebtn}>
-        <TouchableOpacity style={styles.button}>
+        {/* <TouchableOpacity style={styles.button}>
           <Text style={styles.btntext}>Save</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           disabled={isDisabled}
           onPress={handleSubmit}
@@ -680,12 +738,14 @@ const getStyles = (errorMsg: any) =>
     btntext1: {
       fontSize: 16,
       color: white,
+      textAlign: 'center',
     },
     button2: {
       padding: 10,
       borderRadius: 5,
       backgroundColor: buttonGreen,
       borderColor: buttonGreen,
+      width: '30%',
     },
     calendar: {
       borderWidth: 1,

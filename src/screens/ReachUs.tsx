@@ -41,11 +41,7 @@ const ReachUs = () => {
     }
     Linking.openURL(phoneNumber);
   }
-  const origin = {latitude: 18.932245, longitude: 72.826439};
-  const destination = {
-    latitude: 19.01445577493574,
-    longitude: 72.86086460575461,
-  };
+
   return (
     <View style={styles.subContainer}>
       <View style={styles.card}>
@@ -203,7 +199,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     alignSelf: 'center',
   },
-  lineContainer: {marginTop: 18},
+  lineContainer: {marginTop: 16},
   line: {
     backgroundColor: 'green',
     width: '95%',

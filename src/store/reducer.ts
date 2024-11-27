@@ -23,6 +23,7 @@ export const reducer = (state = initialState, action: any) => {
         appointment => appointment.id === action.data.id,
       );
 
+      console.log('inside store', isNewAppointment);
       return {
         ...state,
         userAppointData: isNewAppointment
@@ -39,6 +40,7 @@ export const reducer = (state = initialState, action: any) => {
             : appointment,
         ),
       };
+
     case DELETE_DATA:
       return {
         ...state,

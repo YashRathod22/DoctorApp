@@ -30,13 +30,20 @@ const FormSubmission = ({route}: any) => {
           ? 'Your Appointment has been booked.'
           : 'Your Submission has been received.'}
       </Text>
-      {route?.params?.fromAppointment ? (
+      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Appointments')}
+          onPress={() => navigation.navigate('Home')}
           style={styles.button2}>
-          <Text style={styles.btntext1}>Go to Appointments</Text>
+          <Text style={styles.btntext1}>Go to Home</Text>
         </TouchableOpacity>
-      ) : null}
+        {route?.params?.fromAppointment ? (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Appointments')}
+            style={styles.button2}>
+            <Text style={styles.btntext1}>Go to Appointments</Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </View>
   );
 };
@@ -87,7 +94,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: buttonGreen,
     borderColor: buttonGreen,
-    width: '50%',
+    width: '42%',
   },
 });
 export default FormSubmission;
