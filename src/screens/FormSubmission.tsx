@@ -13,6 +13,11 @@ const FormSubmission = ({route}: any) => {
     navigation.navigate('Home');
     return true;
   }, []);
+  function handleNavigation() {
+    route?.params?.fromAppointment
+      ? navigation.navigate('Appointments')
+      : navigation.navigate('HistoryScreen');
+  }
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
@@ -36,11 +41,13 @@ const FormSubmission = ({route}: any) => {
           style={styles.button2}>
           <Text style={styles.btntext1}>Go to Home</Text>
         </TouchableOpacity>
-        {route?.params?.fromAppointment ? (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Appointments')}
-            style={styles.button2}>
-            <Text style={styles.btntext1}>Go to Appointments</Text>
+        {route?.params?.fromAppointment || route?.params?.fromHistory ? (
+          <TouchableOpacity onPress={handleNavigation} style={styles.button2}>
+            <Text style={styles.btntext1}>
+              {route?.params?.fromAppointment
+                ? `Go to Appointments`
+                : `Go to Medical History`}
+            </Text>
           </TouchableOpacity>
         ) : null}
       </View>
@@ -94,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: buttonGreen,
     borderColor: buttonGreen,
-    width: '42%',
+    width: '45%',
   },
 });
 export default FormSubmission;

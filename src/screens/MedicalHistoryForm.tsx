@@ -18,7 +18,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {useDispatch, UseDispatch, useSelector} from 'react-redux';
-import {storeData} from '../store/action';
+import {storeData, updateUserData} from '../store/action';
 import {buttonGreen, errorRed, inputGrey, white} from '../utils/Color';
 import {
   onBlurErrorAge,
@@ -41,9 +41,11 @@ import ErrorPopUp from '../components/ErrorPopUp';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
 import SelectDropdown from 'react-native-select-dropdown';
+import moment from 'moment';
+import {nanoid} from '@reduxjs/toolkit';
 
-const MedicalHistoryForm = () => {
-  const [selectedDate, setSelectedDate] = useState<String>('');
+const MedicalHistoryForm = ({route}: any) => {
+  const [selectedDate, setSelectedDate] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
   const [firstNameError, setFirstNameError] = useState(false);
@@ -57,16 +59,28 @@ const MedicalHistoryForm = () => {
   const [reasonError, setReasonError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
   const [emailExist, setEmailExist] = useState(false);
+  // const [userDetails, setUserDetails] = useState({
+  //   firstName: '',
+  //   lastName: '',
+  //   age: 0,
+  //   gender: '',
+  //   email: '',
+  //   height: 0,
+  //   weight: 0,
+  //   dob: '',
+  //   reason: '',
+  // });
   const [userDetails, setUserDetails] = useState({
-    firstName: '',
-    lastName: '',
-    age: 0,
-    gender: '',
-    email: '',
-    height: 0,
-    weight: 0,
-    dob: '',
-    reason: '',
+    id: route?.params?.uniqueId ? route?.params?.uniqueId : nanoid(),
+    firstName: route?.params?.userHistoryData.firstName || '',
+    lastName: route?.params?.userHistoryData.lastName || '',
+    age: route?.params?.userHistoryData.age || 0,
+    gender: route?.params?.userHistoryData.gender || '',
+    email: route?.params?.userHistoryData.email || '',
+    height: route?.params?.userHistoryData.height || 0,
+    weight: route?.params?.userHistoryData.weight || 0,
+    dob: route?.params?.userHistoryData.dob || '',
+    reason: route?.params?.userHistoryData.reason || '',
   });
   const todayDate = new Date();
   const [formValidation, setFormValidation] = useState({
@@ -90,6 +104,24 @@ const MedicalHistoryForm = () => {
     reasonErrTxt: '',
     genderErrTxt: '',
   });
+
+  useEffect(() => {
+    if (route?.params?.userHistoryData) {
+      setUserDetails({
+        id: route?.params?.uniqueId || nanoid(),
+        firstName: route?.params?.userHistoryData.firstName || '',
+        lastName: route?.params?.userHistoryData.lastName || '',
+        age: route?.params?.userHistoryData.age || 0,
+        gender: route?.params?.userHistoryData.gender || '',
+        email: route?.params?.userHistoryData.email || '',
+        height: route?.params?.userHistoryData.height || 0,
+        weight: route?.params?.userHistoryData.weight || 0,
+        dob: route?.params?.userHistoryData.dob || '',
+        reason: route?.params?.userHistoryData.reason || '',
+      });
+    }
+  }, [route?.params?.userHistoryData]);
+
   const [isDisabled, setIsDisabled] = useState(false);
   useEffect(() => {
     if (formValidation.errCount > 0) {
@@ -111,6 +143,8 @@ const MedicalHistoryForm = () => {
   const userData = useSelector((state: any) => state.reducer.userDetails);
   const email = userData.map((data: any) => data.email);
   const checkEmail = (userEmail: string) => {
+    if (route?.params?.userHistoryData) return false;
+
     const newAray = email?.filter((e: string) => e === userEmail);
     if (newAray[0] === userEmail) {
       return true;
@@ -126,7 +160,6 @@ const MedicalHistoryForm = () => {
     const month = String(dt.getMonth() + 1).padStart(2, '0');
     const year = dt.getFullYear();
     const dt1 = `${day1}/${month}/${year}`;
-    console.log('sdcsdcsdc', dt1);
 
     setUserDetails(prevDetails => ({
       ...prevDetails,
@@ -136,6 +169,7 @@ const MedicalHistoryForm = () => {
     // calculateAge(dt1);
     hideDatePicker();
   };
+  console.log(selectedDate);
 
   // useEffect(() => {
   //   if (userDetails.dob !== '') {
@@ -264,9 +298,17 @@ const MedicalHistoryForm = () => {
 
     setFormValidation(newFormValidation);
 
-    if (newFormValidation.errCount === 0) {
+    if (
+      newFormValidation.errCount === 0 &&
+      !newFormValidation.emailError &&
+      !route?.params?.userHistoryData
+    ) {
       dispatch(storeData(userDetails));
-      navigation.navigate('FormSubmission');
+      navigation.navigate('FormSubmission', {fromHistory: true});
+    }
+    if (route?.params?.userHistoryData) {
+      dispatch(updateUserData(userDetails));
+      navigation.navigate('HistoryScreen');
     }
   };
 
@@ -311,7 +353,14 @@ const MedicalHistoryForm = () => {
       calculateAge(userDetails.dob);
     }
   }, [userDetails.dob]);
-
+  useEffect(() => {
+    setSelectedDate(
+      route?.params?.userHistoryData?.dob
+        ? route?.params?.userHistoryData?.dob
+        : '',
+    );
+    console.log('selected date: ', selectedDate);
+  }, [route?.params?.userHistoryData]);
   return (
     <>
       <ErrorPopUp
@@ -332,6 +381,13 @@ const MedicalHistoryForm = () => {
                 data={gender}
                 onSelect={(selectedItem, index) =>
                   setUserDetails({...userDetails, gender: selectedItem.value})
+                }
+                defaultValueByIndex={
+                  route?.params?.userHistoryData.gender
+                    ? route?.params?.userHistoryData.gender === 'Male'
+                      ? 0
+                      : 1
+                    : undefined
                 }
                 renderButton={(selectedItem, isOpened) => {
                   return (
@@ -480,6 +536,11 @@ const MedicalHistoryForm = () => {
                   onConfirm={handleConfirm}
                   onCancel={hideDatePicker}
                   maximumDate={todayDate}
+                  date={
+                    selectedDate
+                      ? new Date(moment(selectedDate, 'DD/MM/YYYY'))
+                      : todayDate
+                  }
                 />
               </TouchableOpacity>
             </View>

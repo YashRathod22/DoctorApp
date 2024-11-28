@@ -1,6 +1,8 @@
 import {
   DELETE_DATA,
+  DELETE_USER_DATA,
   UPDATE_APPOINTMENT,
+  UPDATE_USER_DATA,
   USER_APPOINT_DATA,
   USER_DATA,
 } from './actionType';
@@ -14,9 +16,33 @@ const initialState = {
 export const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case USER_DATA:
+      const isNewUserData = !state.userDetails.some(
+        userData => userData.id === action.data.id,
+      );
+      return {
+        // ...state,
+        // userDetails: [...state.userDetails, action.data],
+        ...state,
+        userDetails: isNewUserData
+          ? [...state.userDetails, action.data]
+          : state.userDetails,
+      };
+    case UPDATE_USER_DATA:
       return {
         ...state,
-        userDetails: [...state.userDetails, action.data],
+        userDetails: state.userDetails.map(userData =>
+          userData.id === action.data.id
+            ? {...userData, ...action.data}
+            : userData,
+        ),
+      };
+
+    case DELETE_USER_DATA:
+      return {
+        ...state,
+        userDetails: state.userDetails.filter(
+          userData => userData.id !== action.data,
+        ),
       };
     case USER_APPOINT_DATA:
       const isNewAppointment = !state.userAppointData.some(

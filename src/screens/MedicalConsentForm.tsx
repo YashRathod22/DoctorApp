@@ -62,7 +62,7 @@ const MedicalConsentForm = () => {
   return (
     <>
       <ScrollView bounces={false}>
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView enableOnAndroid={true}>
           <View style={styles.container}>
             <Text style={styles.heading}>Online Medical Consent Form</Text>
             <View style={styles.line}></View>

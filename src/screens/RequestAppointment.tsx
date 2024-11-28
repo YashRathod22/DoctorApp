@@ -20,6 +20,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {storeAppointData, updateAppointData} from '../store/action';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 
 import {
   lightBlue,
@@ -85,11 +86,7 @@ const RequestAppointment = ({route}: any) => {
   const day1 = String(todayDate.getDate()).padStart(2, '0');
   const month1 = String(todayDate.getMonth() + 1).padStart(2, '0');
   const dateString = `${day1}/${month1}/${yearFind}`;
-  const [selectedDate, setSelectedDate] = useState(
-    route?.params?.userEmailData.appointmentDate
-      ? route?.params?.userEmailData.appointmentDate
-      : '',
-  );
+  const [selectedDate, setSelectedDate] = useState('');
   const [defaultDate, setDefaultDate] = useState(dateString);
   const [day, setDay] = useState(weekday[dayFind]);
   const [date, setDate] = useState(dateFind);
@@ -102,31 +99,16 @@ const RequestAppointment = ({route}: any) => {
   const [appointSlotError, setAppointSlotError] = useState(false);
   const [userAppointmentDetails, setUserAppointmentDetails] = useState({
     id: route?.params?.uniqueId ? route?.params?.uniqueId : nanoid(),
-    firstName: route?.params?.userEmailData.firstName
-      ? route?.params?.userEmailData.firstName
-      : '',
-    lastName: route?.params?.userEmailData.lastName
-      ? route?.params?.userEmailData.lastName
-      : '',
-    age: route?.params?.userEmailData.age
-      ? route?.params?.userEmailData.age
-      : 0,
-    gender: route?.params?.userEmailData.gender
-      ? route?.params?.userEmailData.gender
-      : '',
-    email: route?.params?.userEmailData.email
-      ? route?.params?.userEmailData.email
-      : '',
-    appointmentDate: route?.params?.userEmailData.appointmentDate
-      ? route?.params?.userEmailData.appointmentDate
-      : '',
-    slotTime: route?.params?.userEmailData.slotTime
-      ? route?.params?.userEmailData.slotTime
-      : '',
-    phoneNo: route?.params?.userEmailData.phoneNo
-      ? route?.params?.userEmailData.phoneNo
-      : '',
+    firstName: route?.params?.userEmailData.firstName || '',
+    lastName: route?.params?.userEmailData.lastName || '',
+    age: route?.params?.userEmailData.age || 0,
+    gender: route?.params?.userEmailData.gender || '',
+    email: route?.params?.userEmailData.email || '',
+    appointmentDate: route?.params?.userEmailData.appointmentDate || '',
+    slotTime: route?.params?.userEmailData.slotTime || '',
+    phoneNo: route?.params?.userEmailData.phoneNo || '',
   });
+
   const [appointmentFormValidation, setAppointFormValidation] = useState({
     ...userAppointmentDetails,
     firstNameErr: false,
@@ -148,12 +130,24 @@ const RequestAppointment = ({route}: any) => {
     genderErrTxt: '',
   });
 
+  useEffect(() => {
+    if (route?.params?.userEmailData) {
+      setUserAppointmentDetails({
+        id: route?.params?.uniqueId || nanoid(),
+        firstName: route?.params?.userEmailData.firstName || '',
+        lastName: route?.params?.userEmailData.lastName || '',
+        age: route?.params?.userEmailData.age || 0,
+        gender: route?.params?.userEmailData.gender || '',
+        email: route?.params?.userEmailData.email || '',
+        appointmentDate: route?.params?.userEmailData.appointmentDate || '',
+        slotTime: route?.params?.userEmailData.slotTime || '',
+        phoneNo: route?.params?.userEmailData.phoneNo || '',
+      });
+    }
+  }, [route?.params?.userEmailData]);
+
   const [isDisabled, setIsDisabled] = useState(false);
-  const [updatedDate, setUpdatedDate] = useState(
-    route?.params?.userEmailData.appointmentDate
-      ? route?.params?.userEmailData.appointmentDate
-      : new Date(),
-  );
+
   useEffect(() => {
     if (appointmentFormValidation.errCount > 0) {
       setIsDisabled(true);
@@ -182,7 +176,6 @@ const RequestAppointment = ({route}: any) => {
     const day = weekday[dayFind];
     const date1 = dt.getDate();
     const month1 = dt.getMonth();
-    hideDatePicker();
 
     setSelectedDate(dt1);
     setUserAppointmentDetails({
@@ -193,6 +186,7 @@ const RequestAppointment = ({route}: any) => {
     setDate(date1);
     setDay(day);
     setYear(year);
+    hideDatePicker();
   };
   const radioButtons: RadioButtonProps[] = useMemo(
     () => [
@@ -368,8 +362,6 @@ const RequestAppointment = ({route}: any) => {
       navigation.navigate('Appointments');
     }
   };
-  //   console.log(userAppointmentDetails);
-  console.log(route?.params?.userEmailData.appointmentDate);
 
   const styles = getStyles(appointmentFormValidation.genderError);
 
@@ -398,8 +390,21 @@ const RequestAppointment = ({route}: any) => {
       });
     }
   }, [userAppointmentDetails.gender]);
-  const [contentBottom, setContentBottom] = useState(0);
-
+  useEffect(() => {
+    console.log(
+      'Appointments Route',
+      route,
+      moment(route?.params?.userEmailData.appointmentDate, 'DD/MM/YYYY'),
+    );
+  }, [route]);
+  useEffect(() => {
+    setSelectedDate(
+      route?.params?.userEmailData?.appointmentDate
+        ? route?.params?.userEmailData?.appointmentDate
+        : '',
+    );
+    console.log('selected date: ', selectedDate);
+  }, [route?.params?.userEmailData]);
   return (
     <>
       <ErrorPopUp
@@ -667,7 +672,7 @@ const RequestAppointment = ({route}: any) => {
                     {borderColor: appointDateError ? errorRed : inputGrey},
                   ]}
                   onPress={showDatePicker}>
-                  <Text>{selectedDate ? selectedDate : defaultDate}</Text>
+                  <Text>{selectedDate}</Text>
                   <View style={styles.calendarIcon}>
                     <FontAwesome
                       name="calendar"
@@ -681,10 +686,10 @@ const RequestAppointment = ({route}: any) => {
                     mode="date"
                     onConfirm={handleConfirm}
                     onCancel={hideDatePicker}
-                    minimumDate={updatedDate}
+                    minimumDate={todayDate}
                     date={
-                      route?.params?.userEmailData.appointmentDate
-                        ? route?.params?.userEmailData.appointmentDate
+                      selectedDate
+                        ? new Date(moment(selectedDate, 'DD/MM/YYYY'))
                         : todayDate
                     }
                   />

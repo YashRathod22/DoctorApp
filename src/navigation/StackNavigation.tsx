@@ -13,6 +13,7 @@ import {Pressable} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import SplashScreen from '../screens/SplashScreen';
 import Home from '../screens/Home';
+import HistoryScreen from '../screens/HistoryScreen';
 
 const StackNavigation = () => {
   const Stack = createStackNavigator();
@@ -79,6 +80,20 @@ const StackNavigation = () => {
         }}
         name="FormSubmission"
         component={FormSubmission}
+      />
+      <Stack.Screen
+        options={{
+          headerLeft: props => (
+            <Pressable
+              style={{marginLeft: 8}}
+              onPress={() => navigation.navigate('Home')}>
+              <Entypo name="chevron-left" size={25} color={'#000'} />
+            </Pressable>
+          ),
+          title: 'Medical History',
+        }}
+        name="HistoryScreen"
+        component={HistoryScreen}
       />
     </Stack.Navigator>
   );

@@ -5,40 +5,38 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import {deleteData} from '../store/action';
+import {deleteData, deleteUserData} from '../store/action';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useGoBackHandler} from '../customHooks/GoBackhandler';
 
-const Appointments = () => {
-  const appointmentData = useSelector(
-    (state: any) => state.reducer.userAppointData,
-  );
+const HistoryScreen = () => {
+  const userData = useSelector((state: any) => state.reducer.userDetails);
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
 
   function deleteAppointData(data) {
-    dispatch(deleteData(data.id));
+    dispatch(deleteUserData(data.id));
   }
 
   useGoBackHandler(() => {
     navigation.navigate('Home');
     return true;
   }, []);
-  console.log(appointmentData);
+  console.log(userData);
 
   return (
     <ScrollView style={{flexGrow: 1, marginBottom: insets.bottom}}>
-      {appointmentData.length > 0 ? (
-        appointmentData.map((data: any) => (
+      {userData.length > 0 ? (
+        userData.map((data: any) => (
           <View key={data.id} style={styles.container}>
             <View style={styles.card}>
-              <Text style={styles.text}>Booked Appointments</Text>
+              <Text style={styles.text}>Recorded History</Text>
               <View style={styles.iconContainer}>
                 <Pressable
                   onPress={() =>
-                    navigation.navigate('RequestAppointment', {
-                      userEmailData: data,
+                    navigation.navigate('MedicalHistoryForm', {
+                      userHistoryData: data,
                       uniqueId: data.id,
                     })
                   }
@@ -62,14 +60,13 @@ const Appointments = () => {
             </Text>
             <Text style={styles.text2}>Gender: {data.gender}</Text>
             <Text style={styles.text2}>Age: {data.age}</Text>
-            <Text style={styles.text2}>Date: {data.appointmentDate} </Text>
-            <Text style={styles.text2}>Slot Time: {data.slotTime} pm</Text>
+            <Text style={styles.text2}>Dob: {data.dob} </Text>
             <Text style={styles.text2}>Email: {data.email}</Text>
           </View>
         ))
       ) : (
         <View style={styles.container}>
-          <Text style={styles.text}>No Booked Appointments</Text>
+          <Text style={styles.text}>No Records Found</Text>
         </View>
       )}
     </ScrollView>
@@ -98,7 +95,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    gap: '10%',
+    gap: '20%',
     alignSelf: 'flex-start',
   },
   iconContainer: {
@@ -108,9 +105,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   icon: {
-    // alignSelf: 'flex-end',
+    alignSelf: 'center',
     marginTop: 15,
-    // marginRight: '10%'
+    // marginRight: '10%',
   },
   text: {
     textAlign: 'center',
@@ -125,4 +122,4 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
-export default Appointments;
+export default HistoryScreen;
