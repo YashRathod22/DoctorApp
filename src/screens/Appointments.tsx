@@ -25,7 +25,6 @@ const Appointments = () => {
     navigation.navigate('Home');
     return true;
   }, []);
-  console.log(appointmentData);
 
   return (
     <ScrollView style={{flexGrow: 1, marginBottom: insets.bottom}}>

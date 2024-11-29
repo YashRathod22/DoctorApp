@@ -24,7 +24,6 @@ const HistoryScreen = () => {
     navigation.navigate('Home');
     return true;
   }, []);
-  //   console.log(userData);
 
   function showData(data) {
     <ModalScreen />;

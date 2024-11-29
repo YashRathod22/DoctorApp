@@ -169,20 +169,17 @@ const MedicalHistoryForm = ({route}: any) => {
     // calculateAge(dt1);
     hideDatePicker();
   };
-  console.log(selectedDate);
 
   // useEffect(() => {
   //   if (userDetails.dob !== '') {
   //     calculateAge(userDetails.dob);
   //   }
   // }, [userDetails.dob]);
-  console.log('sdcuser======', userDetails);
 
   function calculateAge(birthDateStr) {
     const [day, month, year] = birthDateStr.split('/').map(Number);
 
     const birthDate = new Date(year, month - 1, day);
-    console.log(birthDate);
 
     if (isNaN(birthDate)) {
       return 'Invalid date format';
@@ -198,11 +195,9 @@ const MedicalHistoryForm = ({route}: any) => {
     ) {
       age--;
     }
-    console.log(age);
     setUserDetails({...userDetails, age: age});
     return age;
   }
-  console.log(userDetails);
 
   const navigation = useNavigation<any>();
 
@@ -359,7 +354,6 @@ const MedicalHistoryForm = ({route}: any) => {
         ? route?.params?.userHistoryData?.dob
         : '',
     );
-    console.log('selected date: ', selectedDate);
   }, [route?.params?.userHistoryData]);
   return (
     <>

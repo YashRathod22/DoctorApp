@@ -390,20 +390,13 @@ const RequestAppointment = ({route}: any) => {
       });
     }
   }, [userAppointmentDetails.gender]);
-  useEffect(() => {
-    console.log(
-      'Appointments Route',
-      route,
-      moment(route?.params?.userEmailData.appointmentDate, 'DD/MM/YYYY'),
-    );
-  }, [route]);
+
   useEffect(() => {
     setSelectedDate(
       route?.params?.userEmailData?.appointmentDate
         ? route?.params?.userEmailData?.appointmentDate
         : '',
     );
-    console.log('selected date: ', selectedDate);
   }, [route?.params?.userEmailData]);
   return (
     <>
