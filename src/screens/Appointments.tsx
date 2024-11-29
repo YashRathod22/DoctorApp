@@ -36,7 +36,7 @@ const Appointments = () => {
               <View style={styles.iconContainer}>
                 <Pressable
                   onPress={() =>
-                    navigation.navigate('RequestAppointment', {
+                    navigation.push('RequestAppointment', {
                       userEmailData: data,
                       uniqueId: data.id,
                     })

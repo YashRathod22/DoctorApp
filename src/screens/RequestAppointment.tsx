@@ -408,13 +408,7 @@ const RequestAppointment = ({route}: any) => {
         <KeyboardAwareScrollView
           contentContainerStyle={{flexGrow: 1}}
           enableOnAndroid={true}
-          keyboardOpeningTime={0}
-          //   extraScrollHeight={0}
-          //   enableResetScrollToCoords
-          //   onKeyboardWillHide={() => setContentBottom(0)}
-          //   onKeyboardWillShow={() => setContentBottom(200)}
-          //   contentInset={{bottom: contentBottom}}
-        >
+          keyboardOpeningTime={0}>
           <View style={styles.container}>
             <Text style={styles.heading}>Request an Appointment</Text>
             <View style={styles.line}></View>
@@ -795,9 +789,6 @@ const RequestAppointment = ({route}: any) => {
         </KeyboardAwareScrollView>
       </ScrollView>
       <View style={styles.savebtn}>
-        {/* <TouchableOpacity style={styles.button3}>
-          <Text style={styles.btntext}>Save</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity
           disabled={isDisabled}
           onPress={() => handleSubmit()}
@@ -856,6 +847,7 @@ const getStyles = (genderErr: any) =>
       width: '100%',
       borderColor: inputGrey,
       borderRadius: 5,
+      color: '#000',
     },
     bottomLabel: {
       marginTop: 5,
@@ -924,6 +916,7 @@ const getStyles = (genderErr: any) =>
       borderRadius: 5,
       height: 150,
       textAlignVertical: 'top',
+      color: '#000',
     },
     savebtn: {
       backgroundColor: white,

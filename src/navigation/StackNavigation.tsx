@@ -70,13 +70,7 @@ const StackNavigation = () => {
       />
       <Stack.Screen
         options={{
-          headerLeft: props => (
-            <Pressable
-              style={{marginLeft: 8}}
-              onPress={() => navigation.navigate('Home')}>
-              <Entypo name="chevron-left" size={25} color={'#000'} />
-            </Pressable>
-          ),
+          headerLeft: () => null,
         }}
         name="FormSubmission"
         component={FormSubmission}

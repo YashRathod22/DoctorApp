@@ -1,11 +1,11 @@
 import {View, Text, StyleSheet, Pressable, ScrollView} from 'react-native';
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 import {darkBlue, white} from '../utils/Color';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import {deleteData, deleteUserData} from '../store/action';
+import {deleteUserData} from '../store/action';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useGoBackHandler} from '../customHooks/GoBackhandler';
 import ModalScreen from './ModalScreen';
@@ -15,19 +15,24 @@ const HistoryScreen = () => {
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
-  function deleteAppointData(data) {
+  const openModal = useCallback((userId: number) => {
+    setSelectedUserId(userId);
+    setModalVisible(true);
+  }, []);
+
+  const selectedUser = userData.find((user: any) => user.id === selectedUserId);
+
+  const deleteAppointData = (data: any) => {
     dispatch(deleteUserData(data.id));
-  }
+  };
 
   useGoBackHandler(() => {
     navigation.navigate('Home');
     return true;
   }, []);
-
-  function showData(data) {
-    <ModalScreen />;
-  }
 
   return (
     <ScrollView style={{flexGrow: 1, marginBottom: insets.bottom}}>
@@ -39,7 +44,7 @@ const HistoryScreen = () => {
               <View style={styles.iconContainer}>
                 <Pressable
                   onPress={() =>
-                    navigation.navigate('MedicalHistoryForm', {
+                    navigation.push('MedicalHistoryForm', {
                       userHistoryData: data,
                       uniqueId: data.id,
                     })
@@ -47,14 +52,15 @@ const HistoryScreen = () => {
                   style={styles.icon}>
                   <FontAwesome5 name="user-edit" size={20} color={darkBlue} />
                 </Pressable>
-                {/* <Pressable onPress={() => showData(data)} style={styles.icon}>
+                <Pressable
+                  onPress={() => openModal(data.id)}
+                  style={styles.icon}>
                   <MaterialCommunityIcons
                     name="account-eye"
                     size={28}
                     color={darkBlue}
                   />
-                </Pressable> */}
-                <ModalScreen data={data} />
+                </Pressable>
                 <Pressable
                   onPress={() => deleteAppointData(data)}
                   style={styles.icon}>
@@ -80,6 +86,15 @@ const HistoryScreen = () => {
         <View style={styles.container}>
           <Text style={styles.text}>No Records Found</Text>
         </View>
+      )}
+
+      {selectedUser && (
+        <ModalScreen
+          data={selectedUser}
+          id={selectedUser.id}
+          visible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
       )}
     </ScrollView>
   );
@@ -107,7 +122,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    gap: '15%',
+    gap: '10%',
     alignSelf: 'flex-start',
   },
   iconContainer: {
@@ -119,7 +134,6 @@ const styles = StyleSheet.create({
   icon: {
     alignSelf: 'center',
     marginTop: 15,
-    // marginRight: '10%',
   },
   text: {
     textAlign: 'center',
@@ -134,4 +148,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
 export default HistoryScreen;

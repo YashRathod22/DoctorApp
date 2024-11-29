@@ -4,7 +4,6 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
 import React, {useState} from 'react';
 import {actuatedNormalize, isTab} from '../utils/Scaling';
@@ -274,9 +273,6 @@ const MedicalConsentForm = () => {
         </KeyboardAwareScrollView>
       </ScrollView>
       <View style={styles.savebtn}>
-        {/* <TouchableOpacity style={styles.button}>
-          <Text style={styles.btntext}>Save</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity onPress={handleSubmit} style={styles.button2}>
           <Text style={styles.btntext1}>Submit</Text>
         </TouchableOpacity>
@@ -333,6 +329,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderColor: inputGrey,
     borderRadius: 5,
+    color: '#000',
   },
   genderContainer: {
     width: isTab() ? '30%' : '100%',

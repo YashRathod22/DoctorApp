@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 0.44,
     backgroundColor: white,
-    width: '90%',
+    width: '94%',
     alignSelf: 'center',
     marginTop: 20,
     borderRadius: 10,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: buttonGreen,
     borderColor: buttonGreen,
-    width: '48%',
+    width: '46%',
   },
 });
 export default FormSubmission;

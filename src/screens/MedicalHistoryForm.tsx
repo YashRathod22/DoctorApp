@@ -361,7 +361,7 @@ const MedicalHistoryForm = ({route}: any) => {
         errCount={formValidation.errCount}
         errMsg={formValidation.errMsg}
       />
-      {/* <SafeAreaView style={{flex: 1}}> */}
+
       <ScrollView bounces={false} keyboardShouldPersistTaps="handled">
         <KeyboardAwareScrollView enableOnAndroid={true}>
           <View style={styles.container}>
@@ -564,24 +564,6 @@ const MedicalHistoryForm = ({route}: any) => {
                   : 'Select date from above'}
               </Text>
             </View>
-            {/* <CustomTextInput
-              style={[styles.input]}
-              onChange={() =>
-                onChangeAge(userDetails, setFormValidation, formValidation)
-              }
-              onBlur={() =>
-                onBlurErrorAge(userDetails, setFormValidation, formValidation)
-              }
-              placeholder={userDetails.age}
-              errorText={formValidation.ageErrTxt}
-              type={'number-pad'}
-              // value={userDetails.age}
-              setUserDetails={setUserDetails}
-              userDetails={userDetails}
-              name="age"
-              errorMsg={formValidation.ageError}
-              editable={false}
-            /> */}
             <Text style={styles.textLabel}>
               Patient Height (cm's) <Text style={styles.star}>*</Text>
             </Text>
@@ -685,12 +667,8 @@ const MedicalHistoryForm = ({route}: any) => {
           </View>
         </KeyboardAwareScrollView>
       </ScrollView>
-      {/* </SafeAreaView> */}
 
       <View style={styles.savebtn}>
-        {/* <TouchableOpacity style={styles.button}>
-          <Text style={styles.btntext}>Save</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity
           disabled={isDisabled}
           onPress={handleSubmit}
@@ -753,6 +731,7 @@ const getStyles = (errorMsg: any) =>
       width: '100%',
       borderColor: inputGrey,
       borderRadius: 5,
+      color: '#000',
     },
     bottomLabel: {
       marginTop: 5,
@@ -772,6 +751,7 @@ const getStyles = (errorMsg: any) =>
       width: isTab() ? '30%' : '100%',
       borderColor: inputGrey,
       borderRadius: 5,
+      color: '#000',
     },
     savebtn: {
       backgroundColor: white,
