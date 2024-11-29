@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {deleteData, deleteUserData} from '../store/action';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useGoBackHandler} from '../customHooks/GoBackhandler';
+import ModalScreen from './ModalScreen';
 
 const HistoryScreen = () => {
   const userData = useSelector((state: any) => state.reducer.userDetails);
@@ -23,7 +24,11 @@ const HistoryScreen = () => {
     navigation.navigate('Home');
     return true;
   }, []);
-  console.log(userData);
+  //   console.log(userData);
+
+  function showData(data) {
+    <ModalScreen />;
+  }
 
   return (
     <ScrollView style={{flexGrow: 1, marginBottom: insets.bottom}}>
@@ -43,6 +48,14 @@ const HistoryScreen = () => {
                   style={styles.icon}>
                   <FontAwesome5 name="user-edit" size={20} color={darkBlue} />
                 </Pressable>
+                {/* <Pressable onPress={() => showData(data)} style={styles.icon}>
+                  <MaterialCommunityIcons
+                    name="account-eye"
+                    size={28}
+                    color={darkBlue}
+                  />
+                </Pressable> */}
+                <ModalScreen data={data} />
                 <Pressable
                   onPress={() => deleteAppointData(data)}
                   style={styles.icon}>
@@ -95,12 +108,12 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    gap: '20%',
+    gap: '15%',
     alignSelf: 'flex-start',
   },
   iconContainer: {
     flexDirection: 'row',
-    gap: '10%',
+    gap: '8%',
     alignItems: 'center',
     justifyContent: 'flex-end',
   },

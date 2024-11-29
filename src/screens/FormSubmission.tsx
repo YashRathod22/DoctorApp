@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: buttonGreen,
     borderColor: buttonGreen,
-    width: '45%',
+    width: '48%',
   },
 });
 export default FormSubmission;
