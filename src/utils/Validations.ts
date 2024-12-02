@@ -541,7 +541,7 @@ export const onBlurErrorReason = (
       ...formValidation,
       errCount: formValidation.errCount + 1,
       reasonError: true,
-      reasonErrTxt: 'Please mention the reason',
+      reasonErrTxt: 'Reason should be more than 3 characters!',
     });
   } else {
     if (
@@ -569,5 +569,10 @@ export const onChangeReason = (
         reasonError: false,
         errCount: formValidation.errCount - 1,
       })
-    : setFormValidation({...formValidation, reasonError: true, errMsg: true});
+    : setFormValidation({
+        ...formValidation,
+        reasonError: true,
+        errMsg: true,
+        reasonErrTxt: 'Reason should be more than 3 characters!',
+      });
 };

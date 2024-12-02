@@ -535,6 +535,7 @@ const MedicalHistoryForm = ({route}: any) => {
                       ? new Date(moment(selectedDate, 'DD/MM/YYYY'))
                       : todayDate
                   }
+                  minimumDate={new Date(1900, 0, 1)}
                 />
               </TouchableOpacity>
             </View>
