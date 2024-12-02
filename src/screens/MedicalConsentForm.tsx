@@ -5,17 +5,26 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {actuatedNormalize, isTab} from '../utils/Scaling';
 import CustomTextInput from '../components/CustomTextInput';
 import {gender} from '../utils/InputData';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {buttonGreen, inputGrey, white} from '../utils/Color';
+import {buttonGreen, errorRed, inputGrey, white} from '../utils/Color';
 import {useNavigation} from '@react-navigation/native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {
+  onBlurErrorFirstName,
+  onBlurErrorLastName,
+  onChangeFirstName,
+  onChangeLastName,
+} from '../utils/Validations';
+import ErrorPopUp from '../components/ErrorPopUp';
+import moment from 'moment';
 
 const MedicalConsentForm = () => {
   const [selectedDate, setSelectedDate] = useState<any>('');
@@ -23,8 +32,9 @@ const MedicalConsentForm = () => {
   const [errorMsg, setErrorMsg] = useState(false);
   const [userDetails, setUserDetails] = useState({
     firstName: '',
-    familyName: '',
+    lastName: '',
     age: 0,
+    dob: '',
     gender: '',
     email: '',
     phoneNo: 0,
@@ -38,6 +48,35 @@ const MedicalConsentForm = () => {
     insuranceType: '',
   });
 
+  const [formValidation, setFormValidation] = useState({
+    ...userDetails,
+    firstNameErr: false,
+    lastNameErr: false,
+    ageError: false,
+    emailError: false,
+    genderError: false,
+    phoneNoErr: false,
+    addressErr: false,
+    cityErr: false,
+    stateErr: false,
+    zipCodeErr: false,
+    errMsg: false,
+    errCount: 0,
+    firstNameErrTxt: '',
+    lastNameErrTxt: '',
+    ageErrTxt: '',
+    emailErrTxt: '',
+    genderErrTxt: '',
+    phoneNoErrTxt: '',
+    addressErrTxt: '',
+    cityErrTxt: '',
+    stateErrTxt: '',
+    zipCodeErrTxt: '',
+  });
+  const [dobError, setDobError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const todayDate = new Date();
+
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -48,18 +87,109 @@ const MedicalConsentForm = () => {
 
   const handleConfirm = (date: any) => {
     const dt = new Date(date);
-    const dt1 = dt.toLocaleDateString().split('T');
-    hideDatePicker();
+    // const dt1 = dt.toLocaleDateString();
+    const day1 = String(dt.getDate()).padStart(2, '0');
+    const month = String(dt.getMonth() + 1).padStart(2, '0');
+    const year = dt.getFullYear();
+    const dt1 = `${day1}/${month}/${year}`;
+
+    setUserDetails(prevDetails => ({
+      ...prevDetails,
+      dob: dt1,
+    }));
     setSelectedDate(dt1);
+    // calculateAge(dt1);
+    hideDatePicker();
   };
 
+  function calculateAge(birthDateStr) {
+    const [day, month, year] = birthDateStr.split('/').map(Number);
+
+    const birthDate = new Date(year, month - 1, day);
+
+    if (isNaN(birthDate)) {
+      return 'Invalid date format';
+    }
+
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+    setUserDetails({...userDetails, age: age});
+    return age;
+  }
+
+  useEffect(() => {
+    if (userDetails.dob !== '') {
+      setDobError(false);
+      formValidation.errCount = Math.max(formValidation.errCount - 1, 0);
+      calculateAge(userDetails.dob);
+    }
+  }, [userDetails.dob]);
+
   const navigation = useNavigation<any>();
+
   const handleSubmit = () => {
-    navigation.navigate('FormSubmission');
+    let newFormValidation = {...formValidation};
+    newFormValidation.errCount = 0;
+
+    if (userDetails.firstName === '') {
+      newFormValidation.errCount += 1;
+      newFormValidation.firstNameErr = true;
+      newFormValidation.firstNameErrTxt = 'First name is required';
+    } else {
+      newFormValidation.firstNameErr = false;
+    }
+
+    if (userDetails.lastName === '') {
+      newFormValidation.errCount += 1;
+      newFormValidation.lastNameErr = true;
+      newFormValidation.lastNameErrTxt = 'Last name is required';
+    } else {
+      newFormValidation.lastNameErr = false;
+    }
+
+    if (!userDetails.email) {
+      setEmailError(true);
+      newFormValidation.emailError = true;
+      // newFormValidation.errCount += 1;
+      newFormValidation.emailErrTxt = 'Email is required';
+    } else {
+      setEmailError(false);
+      newFormValidation.emailError = false;
+    }
+
+    if (userDetails.gender === '') {
+      newFormValidation.errCount += 1;
+      newFormValidation.genderError = true;
+      newFormValidation.genderErrTxt = 'Gender is required!';
+    } else {
+      newFormValidation.genderError = false;
+      newFormValidation.genderErrTxt = '';
+    }
+
+    if (userDetails.dob === '') {
+      setDobError(true);
+      newFormValidation.errCount += 1;
+    } else {
+      setDobError(false);
+    }
+
+    setFormValidation(newFormValidation);
   };
 
   return (
     <>
+      <ErrorPopUp
+        errCount={formValidation.errCount}
+        errMsg={formValidation.errMsg}
+      />
       <ScrollView bounces={false}>
         <KeyboardAwareScrollView enableOnAndroid={true}>
           <View style={styles.container}>
@@ -78,29 +208,68 @@ const MedicalConsentForm = () => {
                     setUserDetails={setUserDetails}
                     userDetails={userDetails}
                     name="firstName"
+                    onBlur={() =>
+                      onBlurErrorFirstName(
+                        userDetails,
+                        setFormValidation,
+                        formValidation,
+                      )
+                    }
+                    onChange={() =>
+                      onChangeFirstName(
+                        userDetails,
+                        setFormValidation,
+                        formValidation,
+                      )
+                    }
+                    errorMsg={formValidation.firstNameErr}
+                    errorText={formValidation.firstNameErrTxt}
                   />
                 </View>
                 <View style={styles.inputContainer}>
                   <CustomTextInput
                     style={styles.input}
-                    placeholder={'Family Name'}
-                    value={userDetails.familyName}
+                    onChange={() =>
+                      onChangeLastName(
+                        userDetails,
+                        setFormValidation,
+                        formValidation,
+                      )
+                    }
+                    onBlur={() =>
+                      onBlurErrorLastName(
+                        userDetails,
+                        setFormValidation,
+                        formValidation,
+                      )
+                    }
+                    placeholder={'Last Name'}
+                    errorText={formValidation.lastNameErrTxt}
+                    value={userDetails.lastName}
                     setUserDetails={setUserDetails}
                     userDetails={userDetails}
-                    name="familyName"
+                    name="lastName"
+                    errorMsg={formValidation.lastNameErr}
                   />
                 </View>
               </View>
             </View>
             <Text style={styles.textLabel}>Age</Text>
-            <CustomTextInput
+            {/* <CustomTextInput
               style={styles.input}
               placeholder="ex: 23"
               value={userDetails.age}
               setUserDetails={setUserDetails}
               userDetails={userDetails}
               name="age"
-            />
+            /> */}
+            <View style={styles.input}>
+              <Text>
+                {userDetails.age > 0
+                  ? userDetails.age
+                  : 'Select date from above'}
+              </Text>
+            </View>
             <Text style={styles.textLabel}>Date of Birth</Text>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
@@ -120,9 +289,32 @@ const MedicalConsentForm = () => {
                   mode="date"
                   onConfirm={handleConfirm}
                   onCancel={hideDatePicker}
+                  maximumDate={todayDate}
+                  date={
+                    selectedDate
+                      ? new Date(moment(selectedDate, 'DD/MM/YYYY'))
+                      : todayDate
+                  }
+                  minimumDate={new Date(1900, 0, 1)}
                 />
               </TouchableOpacity>
             </View>
+            {dobError ? (
+              <>
+                <View style={styles.errorMessage}>
+                  <MaterialIcons
+                    name="error-outline"
+                    size={15}
+                    color={errorRed}
+                  />
+                  <Text style={styles.errorText}>
+                    Date of birth is required.
+                  </Text>
+                </View>
+              </>
+            ) : (
+              <></>
+            )}
             <Text style={styles.textLabel}>Gender</Text>
             <View style={styles.genderContainer}>
               <SelectDropdown
@@ -361,6 +553,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: white,
     textAlign: 'center',
+  },
+  errorMessage: {
+    padding: 5,
+    marginTop: 4,
+    borderRadius: 5,
+    flex: 1,
+    flexDirection: 'row',
+    gap: 5,
+  },
+  errorText: {
+    color: errorRed,
+    fontSize: 12,
+    fontWeight: 500,
   },
   button2: {
     padding: 10,

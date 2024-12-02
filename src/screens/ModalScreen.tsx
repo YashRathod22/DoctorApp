@@ -27,7 +27,6 @@ const ModalScreen = ({
         transparent={true}
         visible={visible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
           setModalVisible(!visible);
         }}>
         <View key={id} style={styles.centeredView}>
