@@ -59,17 +59,7 @@ const MedicalHistoryForm = ({route}: any) => {
   const [reasonError, setReasonError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
   const [emailExist, setEmailExist] = useState(false);
-  // const [userDetails, setUserDetails] = useState({
-  //   firstName: '',
-  //   lastName: '',
-  //   age: 0,
-  //   gender: '',
-  //   email: '',
-  //   height: 0,
-  //   weight: 0,
-  //   dob: '',
-  //   reason: '',
-  // });
+
   const [userDetails, setUserDetails] = useState({
     id: route?.params?.uniqueId ? route?.params?.uniqueId : nanoid(),
     firstName: route?.params?.userHistoryData.firstName || '',
@@ -123,6 +113,7 @@ const MedicalHistoryForm = ({route}: any) => {
   }, [route?.params?.userHistoryData]);
 
   const [isDisabled, setIsDisabled] = useState(false);
+
   useEffect(() => {
     if (formValidation.errCount > 0) {
       setIsDisabled(true);
