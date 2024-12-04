@@ -14,7 +14,7 @@ import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-
+import {RadioButton} from 'react-native-paper';
 import {gender, months, weekday} from '../utils/InputData';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -73,7 +73,6 @@ const timeDetails = [
 ];
 
 const RequestAppointment = ({route}: any) => {
-  const [selectedId, setSelectedId] = useState<string | undefined>();
   const [timeData, setTimeData] = useState(timeDetails);
   const [comment, setComment] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -107,6 +106,8 @@ const RequestAppointment = ({route}: any) => {
     appointmentDate: route?.params?.userEmailData.appointmentDate || '',
     slotTime: route?.params?.userEmailData.slotTime || '',
     phoneNo: route?.params?.userEmailData.phoneNo || '',
+    firstTimeVisit: route?.params?.userEmailData.firstTimeVisit || 'No',
+    comments: route?.params?.userEmailData.comments || '',
   });
 
   const [appointmentFormValidation, setAppointFormValidation] = useState({
@@ -142,6 +143,8 @@ const RequestAppointment = ({route}: any) => {
         appointmentDate: route?.params?.userEmailData.appointmentDate || '',
         slotTime: route?.params?.userEmailData.slotTime || '',
         phoneNo: route?.params?.userEmailData.phoneNo || '',
+        firstTimeVisit: route?.params?.userEmailData.firstTimeVisit || '1',
+        comments: route?.params?.userEmailData.comments || '',
       });
     }
   }, [route?.params?.userEmailData]);
@@ -398,6 +401,7 @@ const RequestAppointment = ({route}: any) => {
         : '',
     );
   }, [route?.params?.userEmailData]);
+
   return (
     <>
       <ErrorPopUp
@@ -643,8 +647,13 @@ const RequestAppointment = ({route}: any) => {
               <Text style={styles.textLabel}>First Time Visit?</Text>
               <RadioGroup
                 radioButtons={radioButtons}
-                onPress={setSelectedId}
-                selectedId={selectedId}
+                onPress={value =>
+                  setUserAppointmentDetails({
+                    ...userAppointmentDetails,
+                    firstTimeVisit: value,
+                  })
+                }
+                selectedId={userAppointmentDetails.firstTimeVisit}
                 containerStyle={{flexDirection: 'row'}}
               />
             </View>
@@ -777,11 +786,16 @@ const RequestAppointment = ({route}: any) => {
             <View>
               <Text style={styles.textLabel}>Comments</Text>
               <TextInput
+                value={userAppointmentDetails.comments}
+                style={styles.inputComment}
                 multiline={true}
                 numberOfLines={14}
-                value={comment}
-                onChange={(text: any) => setComment(text)}
-                style={styles.inputComment}
+                onChangeText={txt =>
+                  setUserAppointmentDetails({
+                    ...userAppointmentDetails,
+                    comments: txt,
+                  })
+                }
               />
             </View>
             <View style={styles.line}></View>
@@ -915,7 +929,7 @@ const getStyles = (genderErr: any) =>
       borderColor: inputGrey,
       borderRadius: 5,
       height: 150,
-      textAlignVertical: 'top',
+      // textAlignVertical: 'top',
       color: '#000',
     },
     savebtn: {

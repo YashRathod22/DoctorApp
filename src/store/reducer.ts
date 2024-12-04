@@ -1,4 +1,5 @@
 import {
+  CONSENT_DATA,
   DELETE_DATA,
   DELETE_USER_DATA,
   UPDATE_APPOINTMENT,
@@ -10,6 +11,7 @@ import {
 const initialState = {
   userDetails: [],
   userAppointData: [],
+  userConsentData: [],
   errorCount: 0,
 };
 
@@ -74,6 +76,16 @@ export const reducer = (state = initialState, action: any) => {
         ),
       };
 
+    case CONSENT_DATA:
+      const isNewConsentData = !state.userConsentData.some(
+        appointment => appointment.id === action.data.id,
+      );
+      return {
+        ...state,
+        userConsentData: isNewConsentData
+          ? [...state.userConsentData, action.data]
+          : state.userConsentData,
+      };
     default:
       return state;
   }

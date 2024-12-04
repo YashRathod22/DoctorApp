@@ -20,6 +20,8 @@ const CustomTextInput = ({
   autoCapitalize,
   inputMode,
   editable,
+  multiline,
+  numberofLines,
 }: any) => {
   return (
     <>
@@ -40,6 +42,8 @@ const CustomTextInput = ({
         autoCapitalize={autoCapitalize}
         inputMode={inputMode}
         editable={editable}
+        multiline={multiline}
+        numberOfLines={numberofLines}
       />
 
       {errorMsg ? (

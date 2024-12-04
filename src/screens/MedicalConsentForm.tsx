@@ -44,12 +44,16 @@ import {
 } from '../utils/Validations';
 import ErrorPopUp from '../components/ErrorPopUp';
 import moment from 'moment';
+import {nanoid} from '@reduxjs/toolkit';
+import {useDispatch, useSelector} from 'react-redux';
+import {storeConsentData} from '../store/action';
 
 const MedicalConsentForm = () => {
   const [selectedDate, setSelectedDate] = useState<any>('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
   const [userDetails, setUserDetails] = useState({
+    id: nanoid(),
     firstName: '',
     lastName: '',
     age: 0,
@@ -179,6 +183,10 @@ const MedicalConsentForm = () => {
   const navigation = useNavigation<any>();
 
   const [isDisabled, setIsDisabled] = useState(false);
+  const dispatch = useDispatch();
+  const consentData = useSelector(
+    (state: any) => state.reducer.userConsentData,
+  );
 
   useEffect(() => {
     if (formValidation.errCount > 0) {
@@ -301,6 +309,7 @@ const MedicalConsentForm = () => {
     setFormValidation(newFormValidation);
 
     if (newFormValidation.errCount === 0 && !newFormValidation.emailError) {
+      dispatch(storeConsentData(userDetails));
       navigation.navigate('FormSubmission');
     }
   };

@@ -212,14 +212,6 @@ const MedicalHistoryForm = ({route}: any) => {
       newFormValidation.lastNameErr = false;
     }
 
-    // if (!userDetails.age) {
-    //   newFormValidation.errCount += 1;
-    //   newFormValidation.ageError = true;
-    //   newFormValidation.ageErrTxt = 'Age is required';
-    // } else {
-    //   newFormValidation.ageError = false;
-    // }
-
     if (!userDetails.height) {
       newFormValidation.errCount += 1;
       newFormValidation.heightError = true;

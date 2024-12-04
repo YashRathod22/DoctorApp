@@ -1,4 +1,5 @@
 import {
+  CONSENT_DATA,
   DELETE_DATA,
   DELETE_USER_DATA,
   UPDATE_APPOINTMENT,
@@ -45,6 +46,13 @@ export function updateAppointData(details: any) {
 export function deleteData(details: any) {
   return {
     type: DELETE_DATA,
+    data: details,
+  };
+}
+
+export function storeConsentData(details: any) {
+  return {
+    type: CONSENT_DATA,
     data: details,
   };
 }
